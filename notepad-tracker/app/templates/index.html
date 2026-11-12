@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notepad Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <aside class="sidebar">
+
+            <div class="sidebar-header">
+                <h2>Notepad Tracker</h2>
+                <p>Write. Save. Track.</p>
+            </div>
+
+            <div class="directory-section">
+
+                <label for="directory-path">Directory Path</label>
+
+                <div class="directory-input-group">
+
+                    <input type="text" id="directory-path" placeholder="Enter directory path">
+
+                    <button id="load-directory-btn" title="Load directory">
+                        Go
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="file-section">
+
+                <div class="section-heading">
+                    <h3>Files</h3>
+
+                    <button id="refresh-files-btn" title="Refresh files">
+                        Refresh
+                    </button>
+                </div>
+
+                <div id="file-list" class="file-list">
+                    <p class="empty-message">Select a directory to view files.</p>
+                </div>
+
+            </div>
+
+        </aside>
+
+        <main class="editor-container">
+
+            <header class="toolbar">
+
+                <div class="file-info">
+
+                    <span id="current-filename">No file selected</span>
+
+                    <span id="save-status" class="status">
+                        Ready
+                    </span>
+
+                </div>
+
+                <div class="toolbar-actions">
+
+                    <button id="new-file-btn" class="secondary-btn">
+                        New File
+                    </button>
+
+                    <button id="init-git-btn" class="secondary-btn" disabled>
+                        Initialize Git
+                    </button>
+
+                    <button id="history-btn" class="secondary-btn" disabled>
+                        Git History
+                    </button>
+
+                    <button id="save-file-btn" class="primary-btn" disabled>
+                        Save
+                    </button>
+
+                </div>
+
+            </header>
+
+            <section class="editor-section">
+
+                <textarea id="editor" data-autosave-delay="{{ config['AUTOSAVE_DELAY_MS'] }}"
+                    placeholder="Select a file or create a new file to start writing..." spellcheck="false"
+                    disabled></textarea>
+
+            </section>
+
+            <footer class="editor-footer">
+
+                <span id="file-path">No file opened</span>
+
+                <span id="character-count">0 characters</span>
+
+            </footer>
+
+            <section id="history-panel" class="history-panel" hidden>
+
+                <div class="history-header">
+
+                    <h3>Git Commit History</h3>
+
+                    <button id="close-history-btn" class="secondary-btn">
+                        Close
+                    </button>
+
+                </div>
+
+                <div id="history-list" class="history-list">
+
+                    <p class="empty-message">
+                        No commit history loaded.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+
+</html>
