@@ -14,3 +14,7 @@ class Config:
     AUTOSAVE_DELAY_MS = int(os.getenv("AUTOSAVE_DELAY_MS", 2000))
 
     MAX_CONTENT_LENGTH = 5 * 1024 * 1024
+
+    GIT_AUTHOR_NAME = os.getenv("GIT_AUTHOR_NAME", "Notepad Tracker")
+
+    GIT_AUTHOR_EMAIL = os.getenv("GIT_AUTHOR_EMAIL", "notepad-tracker@localhost")

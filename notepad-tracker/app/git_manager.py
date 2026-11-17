@@ -3,6 +3,8 @@ from pathlib import Path
 from git import Repo, Actor
 from git.exc import InvalidGitRepositoryError, NoSuchPathError
 
+from config import Config
+
 
 def find_repository(directory_path):
     directory = Path(directory_path).expanduser().resolve(strict=True)
@@ -77,7 +79,7 @@ def commit_file(file_path, message=None):
         if message is None:
             message = f"Update {file.name}"
 
-        author = Actor("Notepad Tracker", "notepad-tracker@localhost")
+        author = Actor(Config.GIT_AUTHOR_NAME, Config.GIT_AUTHOR_EMAIL)
 
         with repo.git.custom_environment(
             GIT_AUTHOR_NAME=author.name,
