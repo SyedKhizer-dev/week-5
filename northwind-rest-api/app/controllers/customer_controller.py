@@ -1,46 +1,21 @@
 from app.extensions import db
 from app.models import Customer
+from app.controllers.base_controller import BaseController
+
+customer_crud = BaseController(Customer, db)
 
 
 def create_customer(customer_data):
-
-    customer = Customer(**customer_data)
-
-    try:
-        db.session.add(customer)
-        db.session.commit()
-
-        return customer
-
-    except Exception:
-        db.session.rollback()
-        raise
+    return customer_crud.create(customer_data)
 
 
 def get_all_customers():
-
-    customers = db.session.execute(db.select(Customer)).scalars().all()
-
-    return customers
+    return customer_crud.get_all()
 
 
 def get_customer_by_id(customer_id):
-
-    customer = db.session.get(Customer, customer_id)
-
-    return customer
+    return customer_crud.get_by_id(customer_id)
 
 
 def update_customer(customer, customer_data):
-
-    try:
-        for field, value in customer_data.items():
-            setattr(customer, field, value)
-
-        db.session.commit()
-
-        return customer
-
-    except Exception:
-        db.session.rollback()
-        raise
+    return customer_crud.update(customer, customer_data)

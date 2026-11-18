@@ -1,49 +1,24 @@
 from app.extensions import db
 from app.models import Order
+from app.controllers.base_controller import BaseController
+
+order_crud = BaseController(Order, db)
 
 
 def create_order(order_data):
-
-    order = Order(**order_data)
-
-    try:
-        db.session.add(order)
-        db.session.commit()
-
-        return order
-
-    except Exception:
-        db.session.rollback()
-        raise
+    return order_crud.create(order_data)
 
 
 def get_all_orders():
-
-    orders = db.session.execute(db.select(Order)).scalars().all()
-
-    return orders
+    return order_crud.get_all()
 
 
 def get_order_by_id(order_id):
-
-    order = db.session.get(Order, order_id)
-
-    return order
+    return order_crud.get_by_id(order_id)
 
 
 def update_order(order, order_data):
-
-    try:
-        for field, value in order_data.items():
-            setattr(order, field, value)
-
-        db.session.commit()
-
-        return order
-
-    except Exception:
-        db.session.rollback()
-        raise
+    return order_crud.update(order, order_data)
 
 
 def get_customer_order_history(customer_id):
