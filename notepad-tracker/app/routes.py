@@ -34,10 +34,9 @@ def get_files():
         return jsonify({"error": str(error)}), 400
 
 
-@main_bp.route("/api/files/open", methods=["POST"])
+@main_bp.route("/api/files/open", methods=["GET"])
 def open_file():
-    data = request.get_json(silent=True) or {}
-    file_path = data.get("path")
+    file_path = request.args.get("path")
 
     if not file_path:
         return jsonify({"error": "File path is required"}), 400
@@ -113,7 +112,7 @@ def new_file():
         )
 
 
-@main_bp.route("/api/files/save", methods=["POST"])
+@main_bp.route("/api/files/save", methods=["PATCH"])
 def save_existing_file():
     data = request.get_json(silent=True) or {}
 
@@ -190,16 +189,15 @@ def initialize_git():
         )
 
 
-@main_bp.route("/api/git/history", methods=["POST"])
+@main_bp.route("/api/git/history", methods=["GET"])
 def file_history():
-    data = request.get_json(silent=True) or {}
-    file_path = data.get("path")
+    file_path = request.args.get("path")
 
     if not file_path:
         return jsonify({"error": "File path is required"}), 400
 
     try:
-        limit = int(data.get("limit", 20))
+        limit = int(request.args.get("limit", 20))
 
         if limit < 1 or limit > 50:
             return jsonify({"error": "History limit must be between 1 and 50"}), 400

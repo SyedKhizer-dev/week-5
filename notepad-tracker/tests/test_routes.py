@@ -73,13 +73,13 @@ class TestRoutes(unittest.TestCase):
         file = self.directory / "notes.txt"
         file.write_text("Hello World", encoding="utf-8")
 
-        response = self.client.post("/api/files/open", json={"path": str(file)})
+        response = self.client.get("/api/files/open", query_string={"path": str(file)})
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get_json()["content"], "Hello World")
 
     def test_open_file_without_path(self):
-        response = self.client.post("/api/files/open", json={})
+        response = self.client.get("/api/files/open")
 
         self.assertEqual(response.status_code, 400)
 
@@ -119,7 +119,7 @@ class TestRoutes(unittest.TestCase):
 
         file = self.directory / "notes.txt"
 
-        response = self.client.post(
+        response = self.client.patch(
             "/api/files/save", json={"path": str(file), "content": "Updated content"}
         )
 
@@ -136,7 +136,7 @@ class TestRoutes(unittest.TestCase):
         file = self.directory / "notes.txt"
         file.write_text("Original content", encoding="utf-8")
 
-        response = self.client.post(
+        response = self.client.patch(
             "/api/files/save", json={"path": str(file), "content": "Updated content"}
         )
 
@@ -150,11 +150,11 @@ class TestRoutes(unittest.TestCase):
 
         file = self.directory / "notes.txt"
 
-        self.client.post(
+        self.client.patch(
             "/api/files/save", json={"path": str(file), "content": "Updated content"}
         )
 
-        response = self.client.post("/api/git/history", json={"path": str(file)})
+        response = self.client.get("/api/git/history", query_string={"path": str(file)})
 
         self.assertEqual(response.status_code, 200)
 
@@ -165,7 +165,7 @@ class TestRoutes(unittest.TestCase):
         self.assertEqual(history[1]["message"], "Create notes.txt")
 
     def test_git_history_without_path(self):
-        response = self.client.post("/api/git/history", json={})
+        response = self.client.get("/api/git/history")
 
         self.assertEqual(response.status_code, 400)
 
@@ -173,9 +173,9 @@ class TestRoutes(unittest.TestCase):
         self.initialize_git()
         self.create_file()
 
-        response = self.client.post(
+        response = self.client.get(
             "/api/git/history",
-            json={"path": str(self.directory / "notes.txt"), "limit": 100},
+            query_string={"path": str(self.directory / "notes.txt"), "limit": 100},
         )
 
         self.assertEqual(response.status_code, 400)

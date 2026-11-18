@@ -1,4 +1,3 @@
-
 const directoryInput = document.getElementById("directory-path");
 const loadDirectoryBtn = document.getElementById("load-directory-btn");
 const refreshFilesBtn = document.getElementById("refresh-files-btn");
@@ -207,10 +206,9 @@ async function openFile(path) {
 
     try {
 
-        const result = await apiRequest("/api/files/open", {
-            method: "POST",
-            body: JSON.stringify({ path })
-        });
+        const query = new URLSearchParams({ path });
+
+        const result = await apiRequest(`/api/files/open?${query}`);
 
         if (requestId !== fileRequestId) {
             return;
@@ -302,7 +300,7 @@ async function saveFile() {
             try {
 
                 const result = await apiRequest("/api/files/save", {
-                    method: "POST",
+                    method: "PATCH",
                     body: JSON.stringify({
                         path: pathToSave,
                         content: contentToSave
@@ -454,13 +452,12 @@ async function loadGitHistory() {
 
         setStatus("Loading Git history...");
 
-        const result = await apiRequest("/api/git/history", {
-            method: "POST",
-            body: JSON.stringify({
-                path: currentFilePath,
-                limit: 20
-            })
+        const query = new URLSearchParams({
+            path: currentFilePath,
+            limit: 20
         });
+
+        const result = await apiRequest(`/api/git/history?${query}`);
 
         historyList.replaceChildren();
 
